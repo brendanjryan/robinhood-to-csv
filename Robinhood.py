@@ -4,6 +4,7 @@ import urllib
 
 import requests
 
+
 class RobinhoodClient(object):
   """
 
@@ -52,7 +53,10 @@ class RobinhoodClient(object):
 
   def get_orders(self):
 
-    def _page(uri, orders=[]):
+    def _page(uri, orders=None):
+      if not orders:
+        orders = []
+        
       res = self.session.get(uri).json()
       orders += res['results']
 
@@ -69,9 +73,9 @@ class RobinhoodExporter(RobinhoodClient):
 
   DESIRED_KEYS = ['average_price', 'quantity', 'side', 'created_at']
 
-  def __init__(self, username, password, filename):
+  def __init__(self, username, password, filename="robinhood.csv"):
     super(RobinhoodExporter, self).__init__(username, password)
-    self.filename = filename or "robinhood.csv"
+    self.filename = filename
 
 
   def format_orders(self, orders):
